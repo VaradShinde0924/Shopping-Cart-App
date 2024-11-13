@@ -1,0 +1,25 @@
+﻿@model IEnumerable<ShoppingCartApp.Models.ApplicationUser>
+
+<h2>Manage Users</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>User ID</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.Email</td>
+                <td>
+                    <!-- You can add more management actions here (e.g., View, Edit, Delete) -->
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

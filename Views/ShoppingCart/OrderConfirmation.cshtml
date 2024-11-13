@@ -1,0 +1,41 @@
+﻿@model ShoppingCartApp.Models.Order
+
+<h2>Order Confirmation</h2>
+
+<p>Thank you for your order! Your order number is <strong>@Model.OrderId</strong>.</p>
+<p>Your order status is currently: <strong>@Model.Status</strong>.</p>
+
+<h3>Order Details</h3>
+
+@if (Model.OrderItems != null && Model.OrderItems.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderItems)
+            {
+                <tr>
+                    <td>@(item.Product != null ? item.Product.Name : "Product not found")</td> <!-- Null check for Product -->
+                    <td>@item.Quantity</td>
+                    <td>@String.Format("{0:C}", item.UnitPrice)</td>
+                    <td>@String.Format("{0:C}", item.Quantity * item.UnitPrice)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No order items found.</p>
+}
+
+<h4>Total Price: @String.Format("{0:C}", Model.TotalPrice)</h4>
+
+<a href="@Url.Action("Index", "Products")" class="btn btn-primary">Continue Shopping</a>

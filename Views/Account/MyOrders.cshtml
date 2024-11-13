@@ -1,0 +1,33 @@
+﻿@model IEnumerable<ShoppingCartApp.Models.Order>
+
+@{
+    ViewBag.Title = "My Orders";
+}
+
+<h2>My Orders</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Total Price</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.OrderId</td>
+                <td>@order.OrderDate</td>
+                <td>@order.TotalPrice</td>
+                <td>@order.Status</td>
+                <td>
+                    <a href="@Url.Action("OrderConfirmation", "Checkout", new { id = order.OrderId })">View Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

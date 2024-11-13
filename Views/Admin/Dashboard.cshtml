@@ -1,0 +1,71 @@
+﻿@model ShoppingCartApp.Models.DashboardViewModel
+
+<h2>Admin Dashboard</h2>
+
+@if (Model != null)
+{
+    <p><strong>Total Orders:</strong> @Model.TotalOrders</p>
+    <p><strong>Total Sales:</strong> @Model.TotalSales</p>
+
+    <h3>Best-Selling Products</h3>
+    if (Model.BestSellingProducts != null && Model.BestSellingProducts.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Total Sold</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model.BestSellingProducts)
+                {
+                    <tr>
+                        <td>@product.ProductId</td>
+                        <td>@product.ProductName</td>
+                        <td>@product.TotalSold</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No best-selling products available.</p>
+    }
+
+    <h3>Active Users</h3>
+    if (Model.ActiveUsers != null && Model.ActiveUsers.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>User Email</th>
+                    <th>Total Orders</th>
+                    <th>Total Spent</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.ActiveUsers)
+                {
+                    <tr>
+                        <td>@user.UserId</td>
+                        <td>@user.UserEmail</td>
+                        <td>@user.TotalOrders</td>
+                        <td>@user.TotalSpent</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No active users available.</p>
+    }
+}
+else
+{
+    <p>Dashboard data is unavailable at this time.</p>
+}

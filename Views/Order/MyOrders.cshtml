@@ -1,0 +1,51 @@
+﻿@model IEnumerable<ShoppingCartApp.Models.Order>
+
+<h2>My Orders</h2>
+
+@if (!Model.Any())
+{
+    <p>No orders found.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Total Price</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.OrderId</td>
+                    <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
+                    <td>@order.TotalPrice.ToString("C")</td>
+                    <td>@order.Status</td> <!-- Show status value -->
+
+                    <td>
+                        <p>(Status for Debugging: @order.Status)</p> <!-- Displaying status for debugging -->
+
+                        @if (order.Status == "Processing" || order.Status == "Shipped")
+                        {
+                            <a href="@Url.Action("Details", new { id = order.OrderId })" class="btn btn-info">Details</a>
+
+                            if (order.Status == "Processing")
+                            {
+                                <a href="@Url.Action("CancelOrder", new { id = order.OrderId })" class="btn btn-danger">Cancel</a>
+                            }
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Details", new { id = order.OrderId })" class="btn btn-info">View</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

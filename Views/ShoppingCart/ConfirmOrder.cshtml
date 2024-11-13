@@ -1,0 +1,119 @@
+﻿@model ShoppingCartApp.Models.CheckoutViewModel
+
+@{
+    ViewBag.Title = "Checkout";
+}
+
+<h2>Proceed to Checkout</h2>
+
+<!-- Displaying the user's name -->
+<p><strong>User:</strong> @User.Identity.Name</p>
+
+<!-- Checkout form -->
+@using (Html.BeginForm("ConfirmOrder", "ShoppingCart", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label for="Name">Name</label>
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Enter your name" })
+    </div>
+
+    <div class="form-group">
+        <label for="Number">Number</label>
+        @Html.TextBoxFor(m => m.Number, new { @class = "form-control", placeholder = "Enter your contact number" })
+    </div>
+
+    <div class="form-group">
+        <label for="Pincode">Pincode</label>
+        @Html.TextBoxFor(m => m.Pincode, new { @class = "form-control", placeholder = "Enter pincode" })
+    </div>
+
+    <div class="form-group">
+        <label for="City">City</label>
+        @Html.TextBoxFor(m => m.City, new { @class = "form-control", placeholder = "Enter city" })
+    </div>
+
+    <div class="form-group">
+        <label for="Address">Address</label>
+        @Html.TextAreaFor(m => m.Address, new { @class = "form-control", rows = 3, placeholder = "Enter your address" })
+    </div>
+
+    <div class="form-group">
+        <label for="State">State</label>
+        @Html.TextBoxFor(m => m.State, new { @class = "form-control", placeholder = "Enter state" })
+    </div>
+
+    <div class="form-group">
+        <label for="Landmark">Landmark (Optional)</label>
+        @Html.TextBoxFor(m => m.Landmark, new { @class = "form-control", placeholder = "Enter landmark (optional)" })
+    </div>
+
+    <h4>Address Type</h4>
+    <div class="form-check">
+        @Html.RadioButtonFor(m => m.AddressType, "Home", new { @class = "form-check-input" })
+        <label class="form-check-label" for="Home">Home</label>
+    </div>
+    <div class="form-check">
+        @Html.RadioButtonFor(m => m.AddressType, "Work", new { @class = "form-check-input" })
+        <label class="form-check-label" for="Work">Work</label>
+    </div>
+
+    <h4>Payment Options</h4>
+    <div class="form-check">
+        @Html.RadioButtonFor(m => m.PaymentOption, "CashOnDelivery", new { @class = "form-check-input", id = "cod" })
+        <label class="form-check-label" for="cod">Cash on Delivery</label>
+    </div>
+
+    <div class="form-check">
+        @Html.RadioButtonFor(m => m.PaymentOption, "UPI", new { @class = "form-check-input", id = "upi" })
+        <label class="form-check-label" for="upi">UPI</label>
+    </div>
+
+    <!-- Display UPI options if UPI is selected -->
+    <div id="upi-options" style="display:none; margin-left: 20px;">
+        <div class="form-check">
+            @Html.RadioButtonFor(m => m.UPIOption, "GooglePay", new { @class = "form-check-input", id = "gpay" })
+            <label class="form-check-label" for="gpay">Google Pay</label>
+        </div>
+        <div class="form-check">
+            @Html.RadioButtonFor(m => m.UPIOption, "PhonePe", new { @class = "form-check-input", id = "phonepe" })
+            <label class="form-check-label" for="phonepe">PhonePe</label>
+        </div>
+
+        <!-- QR Code display -->
+        <div id="qr-code" style="display:none; margin-top: 20px;">
+            <p>Scan the QR Code to make the payment:</p>
+            <img src="~/Images/QRCode.png" alt="QR Code" style="max-width:200px;" />
+            <p><strong>Price:</strong> @Model.TotalPrice</p>
+        </div>
+    </div>
+
+    @*<button type="button" class="btn btn-primary" onclick="window.location.href='@Url.Action("OrderConfirmation", "ShoppingCart", new { id = Model.OrderId })'">Place Order</button>*@
+    <input type="submit" value="place order"/>
+}
+
+<!-- Script for showing and hiding UPI options and QR Code -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Show UPI options when UPI is selected
+        $("input[name='PaymentOption']").change(function () {
+            if ($("#upi").is(":checked")) {
+                $("#upi-options").slideDown();
+            } else {
+                $("#upi-options").slideUp();
+                $("#qr-code").hide();
+            }
+        });
+
+        // Show QR code when Google Pay or PhonePe is selected
+        $("input[name='UPIOption']").change(function () {
+            if ($("#gpay").is(":checked") || $("#phonepe").is(":checked")) {
+                $("#qr-code").slideDown();
+            } else {
+                $("#qr-code").slideUp();
+            }
+        });
+    });
+</script>

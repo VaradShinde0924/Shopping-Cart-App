@@ -1,0 +1,108 @@
+﻿@model PagedList.IPagedList<ShoppingCartApp.Models.Product>
+
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Product Index";
+}
+
+<h2>Product Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-success" })
+</p>
+
+<div>
+    <form method="get" action="@Url.Action("Index")" class="form-inline">
+        <div class="form-group">
+            <input type="text" name="searchTerm" value="@Request.QueryString["searchTerm"]" placeholder="Search..." class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <select name="category" class="form-control">
+                <option value="">All Categories</option>
+                @foreach (var cat in ViewBag.Categories as List<string>)
+                {
+                    <option value="@cat" @(Request.QueryString["category"] == cat ? "selected" : "")>@cat</option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Search</button>
+
+    </form>
+</div>
+<br />
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        @if (!string.IsNullOrEmpty(item.ImageFileName))
+                        {
+                            <img src="@Url.Content("~/Images/" + item.ImageFileName)" alt="@item.Name" class="img-fluid" style="max-height: 150px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <span>No Image</span>
+                        }
+                    </div>
+
+                    <h5>@Html.DisplayFor(modelItem => item.Name)</h5>
+                    <p>@Html.DisplayFor(modelItem => item.Description)</p>
+
+
+                    <div class="text-danger" style="font-weight: bold; font-size: 1.2em;">
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </div>
+                    <div class="text-muted" style="text-decoration: line-through; color: lightgreen; font-size: 0.9em;">
+                        @(item.Price * 1.1m)
+
+                    </div>
+                    <span style="color: lightgreen; font-size: 0.9em">10% off</span>
+
+
+                    <div class="mt-2">
+                        @Html.ActionLink("Add to Cart", "AddToCart", "ShoppingCart", new { id = item.ProductId }, new { @class = "btn btn-primary" })
+                    </div>
+                    <br />
+                    @*<p>
+            <a href="@Url.Action("Edit", new { id = item.ProductId })" class="btn btn-info">Edit</a>
+            <a href="@Url.Action("Details", new { id = item.ProductId })" class="btn btn-info">Details</a>
+            <a href="@Url.Action("Delete", new { id = item.ProductId })" class="btn btn-info">Delete</a>
+        </p>*@
+                    <table align="center">
+                        <tr>
+                            <td>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    @Html.ActionLink("Edit", "Edit", new { id = item.ProductId })
+                                    @: |
+                                    @Html.ActionLink("Details", "Details", new { id = item.ProductId })
+                                    @: |
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.ProductId })
+                                }
+                                else
+                                {
+                                    @Html.ActionLink("Details", "Details", new { id = item.ProductId })
+                                }
+                            </td>
+                        <tr>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div>
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+</div>
+
+<div class="pagination-container" >
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, searchTerm = Request.QueryString["searchTerm"], category = Request.QueryString["category"] }))
+</div>

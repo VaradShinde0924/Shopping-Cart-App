@@ -1,0 +1,28 @@
+﻿@model IEnumerable<ShoppingCartApp.Models.Product>
+<h2>Manage Products</h2>
+<a href="@Url.Action("Create", "Products")" class="btn btn-success">Add New Product</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.ProductId</td>
+                <td>@product.Name</td>
+                <td>@product.Price.ToString("C")</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Products", new { id = product.ProductId })">Edit</a> |
+                    <a href="@Url.Action("Delete", "Products", new { id = product.ProductId })">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,55 @@
+﻿@model List<ShoppingCartApp.Models.Product>
+
+@{
+    ViewBag.Title = "Products in " + ViewBag.Category;
+}
+
+<h2>Products in @ViewBag.Category Category</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Category</th>
+            <th>Image</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            foreach (var product in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => product.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => product.Description)</td>
+                    <td>@Html.DisplayFor(modelItem => product.Price)</td>
+                    <td>@Html.DisplayFor(modelItem => product.Quantity)</td>
+                    <td>@Html.DisplayFor(modelItem => product.Category)</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(product.ImageFileName))
+                        {
+                            <img src="@Url.Content("~/Images/" + product.ImageFileName)" alt="Product Image" style="max-width:100px;" />
+                        }
+                        else
+                        {
+                            <span>No Image Available</span>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" class="text-center">No products available in this category.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    @Html.ActionLink("Back to Home", "Index", "Home", null, new { @class = "btn btn-secondary" })
+</div>

@@ -1,0 +1,16 @@
+﻿@model ShoppingCartApp.Models.Order
+
+<h2>Update Order Status</h2>
+
+<form method="post" action="@Url.Action("UpdateOrderStatus", new { orderId = Model.OrderId })">
+    <div class="form-group">
+        <label for="status">Order Status</label>
+        <select id="status" name="newStatus" class="form-control">
+            <option value="Pending" @(Model.Status == "Pending" ? "selected" : "")>Pending</option>
+            <option value="Processing" @(Model.Status == "Processing" ? "selected" : "")>Processing</option>
+            <option value="Shipped" @(Model.Status == "Shipped" ? "selected" : "")>Shipped</option>
+            <option value="Delivered" @(Model.Status == "Delivered" ? "selected" : "")>Delivered</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Status</button>
+</form>
